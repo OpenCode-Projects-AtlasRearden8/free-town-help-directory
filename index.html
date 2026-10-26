@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free-Town Help Directory</title>
+<style>
+  :root {
+    --ink: #1c2430;
+    --paper: #fbf9f4;
+    --accent: #2f6f4e;
+    --accent-soft: #e3efe8;
+    --line: #d8d2c4;
+    --warn: #8a4d1f;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.55;
+  }
+  header {
+    padding: 2rem 1rem 1rem;
+    max-width: 52rem;
+    margin: 0 auto;
+  }
+  header h1 {
+    font-size: 2rem;
+    margin: 0 0 0.25rem;
+    color: var(--accent);
+  }
+  header .fthd-county {
+    font-style: italic;
+    font-size: 1.05rem;
+    margin: 0 0 0.25rem;
+  }
+  header .fthd-updated { font-size: 0.9rem; color: #555; margin: 0; }
+  .fthd-note {
+    background: var(--accent-soft);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    margin: 1rem 0 0;
+  }
+  .fthd-controls {
+    max-width: 52rem;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  .fthd-search {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    font-family: inherit;
+    font-size: 1rem;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: #fff;
+  }
+  .fthd-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.75rem 0 0;
+  }
+  .fthd-filter {
+    font-family: inherit;
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: #fff;
+    cursor: pointer;
+  }
+  .fthd-filter:hover { background: var(--accent-soft); }
+  .fthd-filter.fthd-active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  .fthd-printbtn {
+    font-family: inherit;
+    font-size: 0.9rem;
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--accent);
+    cursor: pointer;
+    margin-top: 0.75rem;
+  }
+  .fthd-printbtn:hover { background: var(--accent-soft); }
+  main { max-width: 52rem; margin: 1rem auto 3rem; padding: 0 1rem; }
+  .fthd-cat-label {
+    font-size: 1.35rem;
+    color: var(--accent);
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 0.25rem;
+    margin: 2rem 0 1rem;
+  }
+  .fthd-cards, .fthd-section { margin-bottom: 2rem; }
+  .fthd-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .fthd-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .fthd-card-name { margin: 0; font-size: 1.15rem; }
+  .fthd-verified {
+    font-size: 0.78rem;
+    color: var(--warn);
+    white-space: nowrap;
+  }
+  .fthd-line { margin: 0.35rem 0; font-size: 0.95rem; }
+  .fthd-block { margin-top: 0.6rem; }
+  .fthd-block h4 {
+    margin: 0 0 0.2rem;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #6b6450;
+  }
+  .fthd-block p { margin: 0 0 0.2rem; font-size: 0.95rem; }
+  .fthd-list { margin: 0.2rem 0 0.2rem 1.1rem; padding: 0; font-size: 0.95rem; }
+  .fthd-notes { border-left: 3px solid var(--accent-soft); padding-left: 0.75rem; }
+  .fthd-empty { font-style: italic; color: #777; }
+  .fthd-error { background: #fff; border: 1px solid var(--warn); border-radius: 8px; padding: 1rem; }
+  footer {
+    max-width: 52rem;
+    margin: 0 auto;
+    padding: 1rem 1rem 3rem;
+    font-size: 0.88rem;
+    color: #555;
+    border-top: 1px solid var(--line);
+  }
+  @media print {
+    .fthd-controls, .fthd-printbtn, .fthd-search { display: none; }
+    .fthd-card { break-inside: avoid; border: 1px solid #999; }
+    body { background: #fff; }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <h1 id="fthd-title">Free-Town Help Directory</h1>
+    <p class="fthd-county" id="fthd-county"></p>
+    <p class="fthd-updated" id="fthd-updated"></p>
+    <p class="fthd-note" id="fthd-note"></p>
+  </header>
+
+  <div class="fthd-controls">
+    <input id="fthd-search" class="fthd-search" type="search"
+      placeholder="Search this page: name, address, what to bring..."
+      aria-label="Search entries">
+    <div id="fthd-nav"></div>
+    <button id="fthd-print" class="fthd-printbtn" type="button">Print / Save as PDF</button>
+  </div>
+
+  <main id="fthd-mount">
+    <p class="fthd-empty">Loading entries...</p>
+  </main>
+
+  <footer>
+    <p>Maintained by a neighbor, for neighbors. Each listing shows the date someone
+    last <em>verified</em> it by calling or visiting &mdash; hours and rules change, so
+    confirm anything important before you make the trip.</p>
+    <p>Zero signups. No ads. No affiliate links. Everything works offline.</p>
+    <p>Free-Town Help Directory &copy; 2026 Asdale Dynamics, LLC &mdash; MIT licensed.
+    Template and guide: dylanasdale.github.io</p>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

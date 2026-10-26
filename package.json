@@ -1,0 +1,16 @@
+{
+  "name": "free-town-help-directory",
+  "version": "1.0.0",
+  "description": "Offline, fill-in-your-town HTML directory of free local help: libraries, food, seniors, utilities, tax prep, hospital financial aid. Zero signups, zero affiliate links.",
+  "private": true,
+  "license": "MIT",
+  "author": "Asdale Dynamics, LLC",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "test": "node scripts/test.js && node scripts/smoke-dom.js",
+    "test:data": "node scripts/test.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
